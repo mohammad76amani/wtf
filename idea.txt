@@ -1,0 +1,159 @@
+const mongoose = require('mongoose');
+
+const salonSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  address: {
+    street: String,
+    city: String,
+    state: String,
+    zipCode: String,
+    country: String
+  },
+  phone: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    trim: true
+  },
+  businessHours: {
+    monday: { open: String, close: String },
+    tuesday: { open: String, close: String },
+    wednesday: { open: String, close: String },
+    thursday: { open: String, close: String },
+    friday: { open: String, close: String },
+    saturday: { open: String, close: String },
+    sunday: { open: String, close: String }
+  },
+  services: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Service'
+  }],
+  images: [String],
+  rating: {
+    type: Number,
+    default: 0
+  },
+  reviews: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Review'
+  }],
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+const Salon = mongoose.model('Salon', salonSchema);
+
+module.exports = Salon;
+
+const mongoose = require('mongoose');
+
+const serviceSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  description: {
+    type: String,
+    trim: true
+  },
+  duration: {
+    type: Number, // in minutes
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  },
+  category: {
+    type: String,
+    enum: ['hair', 'nails', 'facial', 'massage', 'makeup', 'other'],
+    required: true
+  },
+  salon: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Salon',
+    required: true
+  },
+  image: String,
+  isActive: {
+    type: Boolean,
+    default: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+const Service = mongoose.model('Service', serviceSchema);
+
+module.exports = Service;
+
+
+const mongoose = require('mongoose');
+
+const appointmentSchema = new mongoose.Schema({
+  customer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  salon: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Salon',
+    required: true
+  },
+  service: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Service',
+    required: true
+  },
+  date: {
+    type: Date,
+    required: true
+  },
+  startTime: {
+    type: String,
+    required: true
+  },
+  endTime: {
+    type: String,
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ['pending', 'confirmed', 'cancelled', 'completed'],
+    default: 'pending'
+  },
+  notes: {
+    type: String,
+    trim: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+const Appointment = mongoose.model('Appointment', appointmentSchema);
+
+module.exports = Appointment;
+
